@@ -55,9 +55,9 @@ module uart_controller#(
 	reg 				cfg_channel_enable;
 	reg	 [31:0]			cfg_clk_freq;
 
-	wire				is_receiving;
+	wire				is_receiving;// most important REG 
 	reg					is_receiving_d1;
-	wire				is_transmitting;
+	wire				is_transmitting;// most important REG 拉高在s_axis_tvalid 的下一个时钟周期
 	reg				 	is_transmitting_d1;
 	wire				new_rx_data;
 	wire				new_tx_data;
@@ -71,7 +71,7 @@ module uart_controller#(
 			cfg_lsb_first 		<= LSB_FIRST;
 			cfg_stop_bit  		<= STOP_BIT;
 			cfg_parity_type 	<= PARITY_TYPE;
-			cfg_channel_enable 	<= 1'b1;
+			cfg_channel_enable 	<= 1'b1;  // Todo: default Value Should be Set by User. 
 			cfg_clk_freq		<= CLK_FREQ;
 		end else if (s_axis_cfg_tvalid && s_axis_cfg_tready)begin
 			cfg_baud_rate 		<= s_axis_cfg_tdata[23:0];
@@ -91,7 +91,7 @@ module uart_controller#(
 	end
 
 	assign s_axis_cfg_tready = !is_receiving && !is_transmitting;
-	assign s_axis_tready     = !is_transmitting;
+	assign s_axis_tready     = !is_transmitting; 
 
 	always @(posedge clk ) begin
 		if(rst)begin

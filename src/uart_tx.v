@@ -51,7 +51,7 @@ module uart_tx(
         else if(cfg_parity_type==0)
             data_length <= 4'd8 + cfg_stop_bit ;
         else 
-            data_length <= 4'd9 + cfg_stop_bit ;
+            data_length <= 4'd8 + cfg_stop_bit + 1'b1; 
     end
 
     always @ ( posedge clk ) begin

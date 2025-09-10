@@ -46,7 +46,7 @@ module uart_controller_tb();
     reg  [ 3:0] cnt;
 
 
-    always #10 clk<= ~clk;
+    always #5 clk<= ~clk;
 
     initial begin
         clk <= 1'b0;

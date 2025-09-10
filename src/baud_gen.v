@@ -52,9 +52,17 @@ module baud_gen(
 
     always @ (posedge clk) begin
         if(rst || new_tx_data)
-            baud_tx_cnt <= cfg_baud_rate *3; // due to delay of uart_tx fall to new_tx_data rise
+            baud_tx_cnt <= cfg_baud_rate *3; 
+            // due to delay of uart_tx fall to new_tx_data rise
+            // 发送使能在T0时刻;
+            // is_transmitting在T1时刻拉高;
+            // new_tx_data在T2时刻拉高;
+            // baud_tx_cnt在T3时刻开始计数;
+            // 所以这里要多等3个周期;
+            // 前提是起始位和发送使能是同步的。否则这个延时不成立。
+            // 事实上，起始位下拉发生在T2时刻。
         else if(ce_tx_cnt==ce_cnt_max)
-            baud_tx_cnt <= cfg_baud_rate *3;
+            baud_tx_cnt <= cfg_baud_rate *3; // Todo: don't use *, use +.
         else 
             baud_tx_cnt <= baud_tx_cnt + cfg_baud_rate;
     end
